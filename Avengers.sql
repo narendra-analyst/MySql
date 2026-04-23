@@ -8,7 +8,7 @@ insert into employees values(1,"Tony Stark","Iron Man"),(2,"Bruce Banner","Hulk"
 select * from employees;
 
 insert into employees values(5,"Loki","God of Evil");
-DELETE FROM employeses
-WHERE s_no = 5 AND name = 'Loki' AND superpower = God of Evil;
+DELETE FROM employees
+WHERE s_no = 5;
 truncate table employees; 
 drop table employees;
