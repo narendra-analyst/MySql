@@ -124,13 +124,90 @@ INSERT INTO orders VALUES (104, 'Camera', 4);
 DELETE FROM orders WHERE customer_id = 4;
 DELETE FROM customers WHERE customer_id = 4;
 
+#task
+#1.Parent table for Orders
+create table Customers (
+    customer_id int primary key,
+    customer_name varchar(50)
+);
 
+#2.Parent table for Enrollments
+create table Courses (
+    course_id int primary key,
+    course_name varchar(50)
+);
 
+#1.Employees table
+create table Employees (
+    emp_id int primary key,
+    email varchar(100) unique,
+    salary decimal(10,2),
+    dept varchar(50) default 'IT',
+    check (salary > 15000)
+);
 
+#2.Students table
+create table Students (
+    student_id int primary key,
+    age int,
+    course varchar(50) not null,
+    check (age between 18 AND 30)
+);
 
+#3. Orders table (Foreign Key)
+create table Orders (
+    order_id int primary key,
+    customer_id int,
+    foreign key (customer_id) references Customers(customer_id)
+);
 
+#4.Add CHECK to Products,Add a rule that price must be greater than
+create table Products (
+    product_id int primary key,
+    price decimal(10,2)
+);
+alter table Products
+add constraint chk_price check (price > 0);
 
+#5.Add UNIQUE to Users, Make sure phone number is unique
+create table Users (
+    user_id int primary key,
+    phone varchar(15)
+);
+alter table Users
+add constraint uq_phone unique (phone);
 
+#6.Try to insert duplicate phone number in Users table.
+insert into Users values (1, '9876543210');
+insert into Users values (2, '9876543210');
 
+#7.Create an Enrollments table (foreign Key), student_id + course_id together form primary key
+create table Enrollments (
+    student_id int,
+    course_id int,
+    primary key (student_id, course_id),
+    foreign key (student_id) references Students(student_id),
+    foreign key (course_id) references Courses(course_id)
+);
 
+#8.Create payments table
+create table Payments (
+    payment_id int primary key,
+    order_id int,
+    payment_mode varchar(10),
+    amount decimal(10,2),
+    foreign key (order_id) references Orders(order_id),
+    check (payment_mode in ('UPI', 'Card', 'Cash')),
+    check (amount > 0)
+);
+
+#9.Drop CHECK constraintRemove the price check condition from Products table (drop)
+alter table Products drop check chk_price;
+
+#10.Create an Accounts table
+create table Accounts (
+    account_id int primary key,
+    balance decimal(10,2) default 5000,
+    check (balance >= 0)
+);
 
