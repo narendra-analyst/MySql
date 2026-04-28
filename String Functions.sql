@@ -155,6 +155,10 @@ select year (order_date) as year from data_practice;
 
 #12.Extract month from date
 select month (order_date) as month from data_practice;
+select (order_date) as year from data_practice;
+
+#12.Extract month from date
+select (order_date) as month from data_practice;
 
 #13.Extract day name
 select dayname('2026-04-27') as day_name;
