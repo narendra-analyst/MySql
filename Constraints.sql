@@ -1,6 +1,6 @@
 show databases;
 create database constraints;
-use constraints;
+  
 
 #1.What are Constraints in SQL?
 #Constraints = Rules applied on table columns
@@ -211,3 +211,40 @@ create table Accounts (
     check (balance >= 0)
 );
 
+#What is a JOIN?
+#A JOIN is used to combine data from two or more tables based on a related column.
+#Take data from multiple tables and show it together.
+
+#Types of Joins
+#INNER JOIN:-
+#Shows only matching records in both tables
+SELECT c.name, o.order_id
+FROM Customers c
+INNER JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+#LEFT JOIN:-
+#Shows:
+#All records from left table
+#Matching records from right table
+#If no match → NULL
+SELECT c.name, o.order_id
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+#RIGHT JOIN:-
+#Opposite of LEFT JOIN:
+#All records from right table
+#Matching from left
+SELECT c.name, o.order_id
+FROM Customers c
+RIGHT JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+#FULL JOIN:-
+#Shows:
+#All records from both tables
+#Non-matching → NULL
+#MySQL doesn’t support FULL JOIN directly
+#(we use UNION for that)
