@@ -6,6 +6,28 @@ use joins;
 #A JOIN is used to combine data from two or more tables based on a related column.
 #Take data from multiple tables and show it together.
 
+create table Customers (customer_id int primary key, name varchar(50));
+insert into Customers values
+(1, 'Harry Potter'),
+(2, 'Hermione Granger'),
+(3, 'Ron Weasley'),
+(4, 'Allbus Dumbledore'),
+(5, 'Lord Voldemort');
+INSERT INTO Customers VALUES (6, 'Draco Malfoy');
+
+create table Orders (order_id INT PRIMARY KEY,customer_id INT,order_date DATE);
+insert into Orders values
+(201, 1, '2026-01-10'),
+(202, 1, '2026-02-15'),
+(203, 2, '2026-03-20'),
+(204, 2, '2026-03-20'),
+(205, 3, '2026-03-21'),
+(206, 4, '2026-04-01'),
+(207, 5, '2026-04-02');
+
+select * from Customers;
+select * from Orders;
+
 #Types of Joins
 #INNER JOIN:-
 #Shows only matching records in both tables
@@ -39,6 +61,34 @@ ON c.customer_id = o.customer_id;
 #Non-matching → NULL
 #MySQL doesn’t support FULL JOIN directly
 #(we use UNION for that)
+SELECT c.name, o.order_id
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id
+union
+SELECT c.name, o.order_id
+FROM Customers c
+RIGHT JOIN Orders o
+ON c.customer_id = o.customer_id;
+
+#What is SELF JOIN?
+#A SELF JOIN means Joining a table with itself, Because sometimes data in the same table is related to itself.
+
+create table Employee_s (emp_id int, emp_name varchar(50), manager_id int);
+insert into Employee_s values 
+(1, 'Harry', Null),
+(2, 'Ron', 1),
+(3, 'Hermione', 1),
+(4, 'Draco', 2);
+
+#Simple Example (Real-Life Idea)
+#One employee has a manager and Manager is also an employee.
+#So both are in the same table.
+SELECT e.emp_name AS employee, m.emp_name AS manager
+FROM Employee_s e
+LEFT JOIN Employee_s m
+ON e.manager_id = m.emp_id;
+
 
 #Task:-
 #DEPARTMENTS Table
