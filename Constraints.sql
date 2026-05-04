@@ -1,6 +1,6 @@
 show databases;
 create database constraints;
-  
+use constraints; 
 
 #1.What are Constraints in SQL?
 #Constraints = Rules applied on table columns

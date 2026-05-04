@@ -85,7 +85,7 @@ where salary > (select avg(salary) from Employees);
 select emp_name
 from Employees
 where dept_id in (
-  select dept_id from Departments where location = 'Chennai'
+  select dept_id from Departments where location = 'Scottish Highlands'
 );
 
 #3.Write a query to find employees whose salary is greater than ANY salary of employees in department 10 using ANY operator.

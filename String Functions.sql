@@ -1,6 +1,6 @@
 show databases;
 create database sqlfunctions;
-  
+use sqlfunctions;
 
 #What is sql function?
 #SQL funtions are built-in tools in SQL that helps you perform operations on data.
