@@ -2,8 +2,95 @@ show databases;
 create database subquery_task;
 use subquery_task;
 
-#Task:-
+#Types of Subqueries:-
+#1. Single Row Subquery - Returns only one value
+SELECT name
+FROM Employees
+WHERE salary > (SELECT salary FROM Employees WHERE emp_id = 1);
+#Compare with one value only
 
+#2.Multiple Row Subquery - Returns multiple values
+#Use operators like: (IN, ANY, ALL)
+#Using IN
+SELECT name
+FROM Employees
+WHERE dept_id IN (
+    SELECT dept_id FROM Departments WHERE location = 'Chennai'
+);
+#Means: get employees from departments in Chennai
+
+#Using ANY
+SELECT name
+FROM Employees
+WHERE salary > ANY (
+    SELECT salary FROM Employees WHERE dept_id = 101
+);
+#Salary greater than at least one value
+
+#Using ALL
+SELECT name
+FROM Employees
+WHERE salary > ALL (
+    SELECT salary FROM Employees WHERE dept_id = 101
+);
+#Salary greater than all values
+
+#3.Correlated Subquery
+#Inner query depends on outer query
+SELECT e1.name
+FROM Employees e1
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employees e2
+    WHERE e1.dept_id = e2.dept_id
+);
+#How it works:
+#For each row in outer query
+#Inner query runs again
+#Result: Employees earning more than their department average
+
+#4.Nested Subqueries
+#Subquery inside another subquery
+SELECT name
+FROM Employees
+WHERE dept_id = (
+    SELECT dept_id
+    FROM Departments
+    WHERE manager_id = (
+        SELECT emp_id FROM Employees WHERE name = 'Harry Potter'
+    )
+);
+
+#5.Subquery in SELECT
+SELECT name,
+       (SELECT AVG(salary) FROM Employees) AS avg_salary
+FROM Employees;
+#Adds extra column
+
+#6.Subquery in FROM (Derived Table)
+SELECT dept_id, AVG(salary)
+FROM (
+    SELECT * FROM Employees WHERE salary > 50000
+) AS temp
+GROUP BY dept_id;
+
+#Operators Used with Subqueries
+#Operator	 Meaning
+#=	         Equal to single value
+#IN	         Matches any value
+#ANY	     Compare with any
+#ALL	     Compare with all
+#EXISTS	     Checks if rows exist
+
+#EXISTS Example
+SELECT name
+FROM Employees e
+WHERE EXISTS (
+    SELECT 1 FROM Orders o WHERE e.emp_id = o.emp_id
+);
+#Returns employees who have orders
+
+#Task:-
 CREATE TABLE Departments (
     dept_id INT PRIMARY KEY,
     dept_name VARCHAR(50)
