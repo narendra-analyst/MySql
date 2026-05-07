@@ -273,6 +273,99 @@ row_number() over(partition by name order by id) as duplicates_removed
 from customers) t
 where duplicates_removed =1;
 
+CREATE TABLE emp1 (
+    emp_id INT,
+    emp_name VARCHAR(50),
+    department VARCHAR(50),
+    salary INT
+);
 
+INSERT INTO emp1 VALUES
+(1, 'Aman', 'IT', 90000),
+(2, 'Bala', 'IT', 85000),
+(3, 'Chitra', 'IT', 85000),
+(4, 'Deepak', 'HR', 70000),
+(5, 'Esha', 'HR', 65000),
+(6, 'Farhan', 'Sales', 80000),
+(7, 'Gita', 'Sales', 75000);
 
+select *
+from(select *,
+row_number() over(partition by department order by salary desc) as rn
+from emp1) t
+where rn  = 2;
 
+select *
+from(select *,
+row_number() over(order by salary desc) as rn
+from emp1) t
+where rn  <= 3;
+
+CREATE TABLE users (
+    user_id INT,
+    email VARCHAR(100)
+);
+
+INSERT INTO users VALUES
+(1, 'a@gmail.com'),
+(2, 'b@gmail.com'),
+(3, 'a@gmail.com'),
+(4, 'c@gmail.com'),
+(5, 'b@gmail.com');
+
+select user_id, email,
+count(*) over(partition by email) as cnt
+from users; 
+
+SELECT *
+FROM (
+    SELECT *,
+    COUNT(*) OVER (PARTITION BY email) AS cnt
+    FROM users
+) t
+WHERE cnt > 1;
+
+CREATE TABLE sales_1 (
+    sale_date DATE,
+    amount INT
+);
+
+INSERT INTO sales_1 VALUES
+('2024-01-01', 1000),
+('2024-01-02', 1500),
+('2024-01-03', 1200),
+('2024-01-04', 1800);
+
+select *,
+sum(amount) over(order by sale_date) as total
+from sales_1;
+
+select *,
+amount - lag(amount) over (order by sale_date) as diff
+from sales_1;
+
+CREATE TABLE logins (
+    user_id INT,
+    login_date DATE
+);
+
+INSERT INTO logins VALUES
+(1, '2024-01-01'),
+(1, '2024-01-02'),
+(1, '2024-01-03'),
+(2, '2024-01-01'),
+(2, '2024-01-03');
+
+SELECT user_id
+FROM (
+    SELECT *,
+    DATE_SUB(login_date,
+        INTERVAL ROW_NUMBER() OVER (
+            PARTITION BY user_id
+            ORDER BY login_date
+        ) DAY
+    ) AS grp
+    FROM logins
+) t
+GROUP BY user_id, grp
+HAVING COUNT(*) >= 3;
